@@ -1,141 +1,104 @@
-# RAG CLI Tool: Detailed Plan
+Collecting workspace informationI'll help you create a comprehensive README for your KnowMe project. Based on the workspace structure and files, I'll write a README that explains the project's purpose, features, architecture, and usage instructions.
 
-## Goal of the Software
-The primary goal of this command-line tool is to implement a Retrieval-Augmented Generation (RAG) pipeline that enhances language model outputs with relevant external knowledge. Specifically, the tool will:
+# KnowMe
 
-1. Accept user queries via command line
-2. Determine if retrieval is necessary based on the query content
-3. When beneficial, retrieve relevant information from a knowledge base
-4. Augment the context with retrieved information
-5. Generate high-quality, knowledge-grounded responses
+A sophisticated tutoring system powered by Large Language Models with self-retrieval augmented generation capabilities.
 
-This tool aims to provide a flexible and efficient way to leverage the Self-RAG approach (self-reflective retrieval reasoning) in various applications without requiring complex infrastructure.
+## Overview
 
-## Essential Software Components
+KnowMe is an advanced tutoring system that combines modern LLMs with sophisticated context retrieval to deliver highly personalized learning experiences. The system dynamically determines when to retrieve external knowledge based on the input query, enhancing responses with relevant information without unnecessary context bloat.
 
-### 1. Core RAG Components
+## Features
 
-#### Embedding Model
-- **Purpose**: Convert text into vector representations
-- **Functionality**:
-  - Text preprocessing
-  - Embedding generation for queries and documents
-  - Dimensionality optimization
-- **Implementation**: Wrapper around an efficient embedding model (e.g., sentence-transformers)
+- **Self-RAG Architecture**: Intelligently determines when to use retrieval augmentation for responses
+- **Nomic Embeddings Integration**: Utilizes `nomic-embed-text` for high-quality vector embeddings
+- **Document Processing**: Automatically processes, chunks, and embeds markdown documents
+- **Knowledge Vault**: Maintains a repository of knowledge that can be efficiently retrieved
+- **Context Fusion**: Intelligently combines retrieved context with user queries
+- **Modular Design**: Components are designed to be easily swapped or upgraded
 
-#### Self-RAG Model
-- **Purpose**: Core reasoning component that decides when to retrieve and how to use retrieved information
-- **Functionality**:
-  - Query understanding
-  - Retrieval decision making ("To retrieve?" decision point)
-  - Context integration
-  - Response generation
-- **Implementation**: Adapter for language models with self-reflection capabilities
+## Architecture
 
-#### Context Fusion Engine
-- **Purpose**: Combine retrieved information with the input query in an optimal way
-- **Functionality**:
-  - Information ranking
-  - Redundancy elimination
-  - Context prioritization based on relevance
-  - Handling contradictory information
-- **Implementation**: Custom module with information fusion algorithms
+The system follows a modern RAG architecture with self-retrieval decision making:
 
-### 2. Storage Components
+1. User input is analyzed to determine if external knowledge is needed
+2. If retrieval is necessary, relevant documents are fetched from the vector database
+3. Retrieved context is fused with the original query using the `context_fusion` module
+4. The enhanced query is sent to the `llama3_model` for final response generation
 
-#### Vector Database
-- **Purpose**: Store and retrieve vector embeddings efficiently
-- **Functionality**:
-  - Vector similarity search
-  - Metadata storage and filtering
-  - Index management
-- **Implementation**: Interface to vector database systems (e.g., FAISS, Milvus, or Pinecone)
+The `orchestrator` manages this entire workflow seamlessly.
 
-#### Knowledge Vault
-- **Purpose**: Manage the knowledge base content
-- **Functionality**:
-  - Document storage
-  - Data ingestion pipelines
-  - Knowledge base updates and versioning
-- **Implementation**: Document storage system with preprocessing capabilities
+## Installation
 
-### 3. Utility Components
+```bash
+# Clone the repository
+git clone https://github.com/huypham37/KnowMe.git
+cd KnowMe
 
-#### Configuration Management
-- **Purpose**: Manage application settings
-- **Functionality**:
-  - Environment-specific configurations
-  - Model parameters
-  - Connection settings
-- **Implementation**: Configuration file parsing and validation
+# Install dependencies
+pip install -r requirements.txt
+```
 
-#### CLI Interface
-- **Purpose**: Provide user interaction through command line
-- **Functionality**:
-  - Command parsing
-  - Input validation
-  - Help documentation
-  - Output formatting
-- **Implementation**: Using argparse with extended functionality
+## Usage
 
-#### Logging and Monitoring
-- **Purpose**: Track application behavior and performance
-- **Functionality**:
-  - Structured logging
-  - Performance metrics
-  - Debugging information
-- **Implementation**: Enhanced logging framework with custom formatters
+```python
+from TutorLLM.core.orchestrator import Orchestrator
 
-### 4. Advanced Features (Future Enhancement)
+# Initialize the orchestrator with default settings
+orchestrator = Orchestrator()
 
-#### Batch Processing
-- Support for processing multiple queries from files
-- Parallel processing capabilities
+# Get a response
+response = orchestrator("Explain the concept of matryoshka representation learning")
+print(response)
+```
 
-#### Knowledge Base Management
-- Tools to update, maintain, and extend the knowledge base
-- Support for different document formats (PDF, HTML, Markdown, etc.)
+For document processing:
 
-#### Evaluation Framework
-- Metrics to evaluate the quality of responses
-- Comparison between retrieval-augmented and direct generation
+```python
+from TutorLLM.storage.document_processor import DocumentProcessor
 
-#### Plugin System
-- Extensible architecture for custom retrievers and generators
-- Support for domain-specific adaptations
+# Initialize document processor
+processor = DocumentProcessor(
+    docs_directory="/path/to/your/documents",
+    embedding_model_name="nomic-embed-text",
+    matryoshka_dim=512
+)
 
-## Implementation Plan
+# Process all documents in the directory
+num_processed = processor.process_documents()
+print(f"Processed {num_processed} documents")
+```
 
-### Phase 1: Core Infrastructure
-1. Set up the project structure and basic CLI
-2. Implement the embedding model interface
-3. Create a simple VectorDB connector
-4. Develop basic retrieval functionality
+## Configuration
 
-### Phase 2: RAG Pipeline Integration
-1. Implement the Self-RAG model with retrieval decision logic
-2. Develop the context fusion component
-3. Connect the pipeline components
-4. Add basic logging and error handling
+Key settings can be configured in the `settings.py` file, including:
 
-### Phase 3: Refinement and Optimization
-1. Improve retrieval quality with better ranking
-2. Optimize embedding and storage for performance
-3. Enhance CLI with more options and better documentation
-4. Add comprehensive tests and benchmarks
+- Model selection and parameters
+- Vector database settings
+- Document processing parameters
+- Embedding dimensions
 
-### Phase 4: Advanced Features
-1. Implement batch processing
-2. Add knowledge base management tools
-3. Develop evaluation metrics
-4. Create plugin system for extensibility
+## Known Issues
 
-## Technology Stack
+See the `known-issues` directory for information about current limitations and workarounds, including:
 
-- **Language**: Python (3.9+)
-- **Embedding Models**: Sentence-Transformers, BERT, or custom models
-- **Vector Databases**: FAISS, Milvus, or Pinecone
-- **Text Processing**: spaCy, NLTK
-- **LLM Integration**: OpenAI API, Hugging Face Transformers
-- **Testing**: pytest
-- **Documentation**: Sphinx# KnowMe
+- Quantization issues on Apple Silicon Macs
+
+## Testing
+
+Run the test suite with:
+
+```bash
+python -m unittest discover -s TutorLLM/tests
+```
+
+## License
+
+[Include your license information here]
+
+## Credits
+
+This project builds upon several open-source technologies:
+- [Nomic AI](https://nomic.ai/) for embedding models
+- [Ollama](https://github.com/ollama/ollama) for local model integration
+- [SelfRAG](https://huggingface.co/selfrag/selfrag_llama2_7b) for retrieval augmented generation components

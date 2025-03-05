@@ -24,7 +24,7 @@ pip install mlx-lm
 
 # Convert and quantize model to 8-bit precision
 python -m mlx_lm.convert \
-  --hf-path selfrag/selfrag_llama2_7b \
+  --hf-path /Users/mac/mlx-model/selfrag_llama2_7b_safetensors \
   --mlx-path ./selfrag_llama2_7b_mlx \
   -q \
   --q-bits 8

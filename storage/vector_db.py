@@ -25,7 +25,7 @@ class VectorDB:
         self,
         persist_directory: str = None,
         collection_name: str = "knowledge_vault",
-        embedding_dimension: int = 384,  # Default dimension for nomic-embed-text
+        embedding_dimension: int = 512,  # Default dimension for nomic-embed-text
         distance_metric: str = "cosine",
         create_if_not_exists: bool = True
     ):
